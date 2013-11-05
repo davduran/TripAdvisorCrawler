@@ -5,7 +5,7 @@ import re, json
 
 
 comma_number_s = re.compile(r'\b[1-9]\d{0,2}(,\d{3})*\b|\b[1-9]\d*\b|\b0\b')
-html_token_s = re.compile(r'<br/>|“|”|\n')
+html_token_s = re.compile(r'<br/>|“|”|\t|\n')
 aspects_name = ['Sleep Quality', 'Location', 'Rooms', 'Service', 'Value', 'Cleanliness']
 aspects = dict(zip(aspects_name, range(len(aspects_name))))
 

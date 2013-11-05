@@ -37,12 +37,16 @@ class HotelParser:
     def trip_type(self):
         trip_type_s = self.soup.select('div.trip_type div.value')
         trip_type = [TAutil.strip_comma(x.string) for x in trip_type_s]
+        if not trip_type:
+            trip_type = [-1]*4
         return trip_type
 
     @property
     def aspect_rating(self):
         aspect_rating_s = self.soup.select('#SUMMARYBOX .sprite-ratings')
         aspect_rating = [float(x['content']) for x in aspect_rating_s]
+        if not aspect_rating:
+            aspect_rating = [-1]*6
         return aspect_rating
 
     @property
@@ -95,19 +99,25 @@ class HotelParser:
        
 
     def format_hotel(self, file_handler = None):
-        text_t = "<hotel_id>{hotel_id}\n\
-<city_id>{city_id}\n\
-<rating_count>{rating_count}\n\
-<trip_type>{trip_type}\n\
-<aspect_rating>{aspect_rating}\n\
-<hotel_url>{hotel_url}\n"
-        text = text_t.format(hotel_id = self.hotel_id, 
-            city_id = self.city_id, 
-            rating_count = self.rating_count, 
-            trip_type = self.trip_type,
-            aspect_rating = self.aspect_rating, 
-            hotel_url = self.hotel_url)
-
+#         text_t = "<hotel_id>{hotel_id}\n\
+# <city_id>{city_id}\n\
+# <rating_count>{rating_count}\n\
+# <trip_type>{trip_type}\n\
+# <aspect_rating>{aspect_rating}\n\
+# <hotel_url>{hotel_url}\n"
+#         text = text_t.format(hotel_id = self.hotel_id, 
+#             city_id = self.city_id, 
+#             rating_count = self.rating_count, 
+#             trip_type = self.trip_type,
+#             aspect_rating = self.aspect_rating, 
+#             hotel_url = self.hotel_url)
+        text_list = [self.hotel_id, self.city_id]
+        text_list.extend(self.rating_count)
+        text_list.extend(self.trip_type)
+        text_list.extend(self.aspect_rating)
+        text_list.extend([self.hotel_url])
+        text_mysql = '\t'.join([str(u) for u in text_list])
+        print(text_mysql)
         if file_handler:
-            file_handler.write(text)
-        return text
+            file_handler.write(text_mysql)
+        return text_mysql

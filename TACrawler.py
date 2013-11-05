@@ -2,8 +2,9 @@ import sys, logging, time, traceback
 import os.path
 import CityParser, HotelParser, ReviewParser
 
-url = "http://www.tripadvisor.com/Hotels-g60763-New_York_City_New_York-Hotels.html"
-data_path = '../data'
+# url = "http://www.tripadvisor.com/Hotels-g60763-New_York_City_New_York-Hotels.html"
+url = "http://www.tripadvisor.com/Hotels-g60713-San_Francisco_California-Hotels.html"
+data_path = '../data/sf/'
 error_file = '../data/error_log.txt'
 
 def crawl():
@@ -46,10 +47,11 @@ def crawl():
 			hp.format_hotel(fout)
 			fout.close()
 		except:
+			exc_type, exc_value, exc_traceback = sys.exc_info()
 			error_msg = 'Error in hotel info {0}'.format(hotel_url)
 			print(error_msg)
+			traceback.print_exception(exc_type, exc_value, exc_traceback)
 			ferror.write(error_msg)
-
 		print('Fetching review info.')
 		
 		review_file = 'hotelreview_{0}.txt'.format(hp.hotel_id)
